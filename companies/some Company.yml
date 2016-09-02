@@ -1,0 +1,13 @@
+name: some name
+charts:
+  summary:
+  - "Month End Stock Price "
+  - "Market Cap "
+  - "PE Ratio(TTM) "
+  - "Price to Book "                                
+  - "Price to Tangible Book "                       
+  - "Price-to-Free-Cash-Flow Ratio "                
+  - "EV-to-EBITDA "     
+  - "Return on Equity % "                           
+  - "Return on Assets % "
+    
