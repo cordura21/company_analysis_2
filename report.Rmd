@@ -1,0 +1,104 @@
+---
+title: 
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: scroll
+---
+Current Snapshot
+===
+```{r setup, include=FALSE}
+library(flexdashboard)
+source('main.R')
+```
+
+Column {data-width=100}
+-----------------------------------------------------------------------
+
+### Summary
+
+
+```{r}
+DT::datatable(get_table(company.data,params$charts$summary,latest = TRUE), options = list(
+  bPaginate = FALSE, filter = FALSE
+))
+```
+
+Column {data-width=100}
+-----------------------------------------------------------------------
+
+### Balance Snapshot
+
+```{r}
+DT::datatable(get_table(company.data,params$charts$snapshot_balance,latest = TRUE), options = list(
+  bPaginate = FALSE, filter = FALSE
+))
+```
+
+Column {data-width=100}
+-----------------------------------------------------------------------
+
+### Income snapshot
+
+```{r}
+DT::datatable(get_table(company.data,params$charts$summary_income,latest = TRUE), options = list(
+  bPaginate = FALSE, filter = FALSE
+))
+```
+
+Historical Snapshot
+===
+Column {data-width=100}
+-----------------------------------------------------------------------
+
+### Snapshot
+
+
+```{r}
+
+DT::datatable(get_table(company.data,params$charts$summary,latest = FALSE), options = list(
+  bPaginate = FALSE, filter = FALSE
+))
+```
+
+
+Historical Snapshot
+===
+Column {data-width=100}
+-----------------------------------------------------------------------
+
+### Charts
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+ggplot(data = company.data %>% filter(variable %in% params$charts$summary_chart1),
+       aes(x=date,y=value, group = variable)) + geom_line() +
+  scale_x_discrete() +
+  facet_wrap(~variable, scales = 'free') + theme_bw()
+```
+
+Return
+===
+Column {data-width=100}
+-----------------------------------------------------------------------
+
+### Charts
+
+```{r, fig.width=10}
+library(ggplot2)
+library(dplyr)
+library(directlabels)
+library(lattice)
+
+temp_data <- company.data %>% 
+  filter(variable %in% params$charts$summary_chart2)
+
+x <- ggplot(data = temp_data,
+       aes(x=as.factor(date),y=value, group = variable, colour = variable)) +
+  scale_x_discrete(labels = abbreviate)+ geom_line()  + theme_bw() +
+  theme(legend.position="bottom")
+x
+```

@@ -25,15 +25,19 @@ get_data <- function(company) {
 }
 
 
-get_table <- function(x,table.name, melt = FALSE, reverse = TRUE){
+get_table <- function(x,table.name, melt = FALSE, reverse = TRUE, latest = FALSE){
   require(dplyr)
   x <- x %>% filter(variable %in% table.name)
   if(melt == FALSE){
     require(tidyr)
     x <- x %>% spread(key = date,value = value)
+    x <- x[match(table.name,x$variable),]
   }
   if(reverse){
     x <- x[,c(1,NCOL(x),2:NCOL(x),1)]
+  }
+  if(latest){
+    x <- x[,1:2]
   }
   return(x)
 }
@@ -43,6 +47,3 @@ params <- yaml::yaml.load_file(file.path('companies', paste0(curr_comp,'.yml')))
 
 company.data <- get_data(curr_comp)
 
-company.data %>% spread(date,value)
-
-get_table(company.data,params$charts$summary,melt = FALSE) %>% View()
